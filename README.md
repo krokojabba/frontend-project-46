@@ -2,3 +2,4 @@
 
 [![Actions Status](https://github.com/krokojabba/frontend-project-46/workflows/hexlet-check/badge.svg)](https://github.com/krokojabba/frontend-project-46/actions)
 test
+test
