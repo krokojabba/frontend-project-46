@@ -13,7 +13,7 @@ const parseToObj = (str, type) => {
   }
 };
 
-const genDiff = (filepath1, filepath2, options) => {
+const genDiff = (filepath1, filepath2) => {
   const absFilePath1 = path.resolve(filepath1);
   const file1Type = path.extname(absFilePath1);
   const str1 = readFile(absFilePath1);
@@ -26,23 +26,30 @@ const genDiff = (filepath1, filepath2, options) => {
 
   const unionKey = _.union(Object.keys(obj1), Object.keys(obj2)).sort();
   const diffs = unionKey.flatMap((key) => {
-    let status; //deleted, added, modified, constant
+    let status; // deleted, added, modified, constant
 
     if (!Object.hasOwn(obj1, key)) status = 'added';
     else if (!Object.hasOwn(obj2, key)) status = 'deleted';
     else if (obj1[key] === obj2[key]) status = 'constant';
     else status = 'modified';
+    let result;
 
     switch (status) {
       case 'added':
-        return `+ ${key}: ${obj2[key]}`;
+        result = `+ ${key}: ${obj2[key]}`;
+        break;
       case 'deleted':
-        return `- ${key}: ${obj1[key]}`;
+        result = `- ${key}: ${obj1[key]}`;
+        break;
       case 'constant':
-        return `  ${key}: ${obj1[key]}`;
+        result = `  ${key}: ${obj1[key]}`;
+        break;
       case 'modified':
-        return [`- ${key}: ${obj1[key]}`, `+ ${key}: ${obj2[key]}`];
+        result = [`- ${key}: ${obj1[key]}`, `+ ${key}: ${obj2[key]}`];
+        break;
+      default:
     }
+    return result;
   });
   return `{ \n  ${diffs.join('\n  ')}\n}`;
 };
