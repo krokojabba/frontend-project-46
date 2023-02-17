@@ -2,7 +2,10 @@ import * as fs from 'node:fs';
 import path from 'node:path';
 import _ from 'lodash';
 
-const readFile = (filepath) => fs.readFileSync(filepath, 'utf8');
+const readFile = (filepath) => {
+  const absFilePath = path.resolve(filepath);
+  return fs.readFileSync(absFilePath, 'utf8');
+};
 
 const parseToObj = (str, type) => {
   switch (type) {
@@ -14,15 +17,15 @@ const parseToObj = (str, type) => {
 };
 
 const genDiff = (filepath1, filepath2) => {
-  const absFilePath1 = path.resolve(filepath1);
-  const file1Type = path.extname(absFilePath1);
-  const str1 = readFile(absFilePath1);
-  const obj1 = parseToObj(str1, file1Type);
+  //  const absFilePath1 = path.resolve(filepath1);
+  //  const file1Type = path.extname(absFilePath1);
+  const str1 = readFile(filepath1);
+  const obj1 = parseToObj(str1, path.extname(filepath1));
 
-  const absFilePath2 = path.resolve(filepath2);
-  const file2Type = path.extname(absFilePath2);
-  const str2 = readFile(absFilePath2);
-  const obj2 = parseToObj(str2, file2Type);
+  //  const absFilePath2 = path.resolve(filepath2);
+  //  const file2Type = path.extname(absFilePath2);
+  const str2 = readFile(filepath2);
+  const obj2 = parseToObj(str2, path.extname(filepath2));
 
   const unionKey = _.union(Object.keys(obj1), Object.keys(obj2)).sort();
   const diffs = unionKey.flatMap((key) => {
@@ -51,7 +54,7 @@ const genDiff = (filepath1, filepath2) => {
     }
     return result;
   });
-  return `{ \n  ${diffs.join('\n  ')}\n}`;
+  return `{\n  ${diffs.join('\n  ')}\n}`;
 };
 
 export default genDiff;
