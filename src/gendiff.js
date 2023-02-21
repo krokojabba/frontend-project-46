@@ -1,31 +1,12 @@
-import * as fs from 'node:fs';
-import path from 'node:path';
 import _ from 'lodash';
-
-const readFile = (filepath) => {
-  const absFilePath = path.resolve(filepath);
-  return fs.readFileSync(absFilePath, 'utf8');
-};
-
-const parseToObj = (str, type) => {
-  switch (type) {
-    case '.json':
-      return JSON.parse(str);
-    default:
-      return {};
-  }
-};
+import parseFile from './parsers.js';
 
 const genDiff = (filepath1, filepath2) => {
-  //  const absFilePath1 = path.resolve(filepath1);
-  //  const file1Type = path.extname(absFilePath1);
-  const str1 = readFile(filepath1);
-  const obj1 = parseToObj(str1, path.extname(filepath1));
+  const obj1 = parseFile(filepath1);
+  //  console.log(obj1);
 
-  //  const absFilePath2 = path.resolve(filepath2);
-  //  const file2Type = path.extname(absFilePath2);
-  const str2 = readFile(filepath2);
-  const obj2 = parseToObj(str2, path.extname(filepath2));
+  const obj2 = parseFile(filepath2);
+  //  console.log(obj2);
 
   const unionKey = _.union(Object.keys(obj1), Object.keys(obj2)).sort();
   const diffs = unionKey.flatMap((key) => {

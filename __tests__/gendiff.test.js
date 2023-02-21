@@ -8,11 +8,17 @@ let filePathEmpty;
 let filePathDiff1;
 let filePathDiff2;
 let filePathDiff3;
+let yamlFIlePath1;
+let yamlFIlePath2;
 
 beforeAll(() => {
   filePath1 = '__tests__/__fixtures__/file1.json';
   filePath2 = '__tests__/__fixtures__/file2.json';
   filePathEmpty = '__tests__/__fixtures__/empty.json';
+
+  yamlFIlePath1 = '__tests__/__fixtures__/file1.yaml';
+  yamlFIlePath2 = '__tests__/__fixtures__/file2.yml';
+
   filePathDiff1 = '__tests__/__fixtures__/diff1.txt';
   filePathDiff2 = '__tests__/__fixtures__/diff2.txt';
   filePathDiff3 = '__tests__/__fixtures__/diff3.txt';
@@ -30,4 +36,8 @@ test('diff test', () => {
 
   const diff4 = '{\n  \n}';
   expect(genDiff(filePathEmpty, filePathEmpty)).toBe(diff4);
+
+  expect(genDiff(yamlFIlePath1, yamlFIlePath2)).toBe(diff1);
+
+  expect(genDiff(filePath1, yamlFIlePath1)).toBe(diff2);
 });
