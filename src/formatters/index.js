@@ -1,7 +1,6 @@
 import stylish from './stylish.js';
 import plain from './plain.js';
-
-const defaultFormatter = (diffs) => JSON.stringify(diffs, null, '  ');
+import json from './json.js';
 
 export default (diffs, type) => {
   let format;
@@ -12,8 +11,10 @@ export default (diffs, type) => {
     case 'plain':
       format = plain;
       break;
+    case 'json':
+      format = json;
+      break;
     default:
-      format = defaultFormatter;
   }
 
   return format(diffs);

@@ -10,15 +10,18 @@ let filePath1;
 let filePath2;
 let stylishDiff;
 let plainDiff;
+let jsonDiff;
 
 beforeAll(() => {
   filePath1 = '__fixtures__/file1.json';
   filePath2 = '__fixtures__/file2.yaml';
   stylishDiff = readFile('stylishDiff.txt');
   plainDiff = readFile('plainDiff.txt');
+  jsonDiff = readFile('jsonDiff.json');
 });
 
 test('diff test', () => {
   expect(genDiff(filePath1, filePath2)).toBe(stylishDiff);
   expect(genDiff(filePath1, filePath2, 'plain')).toBe(plainDiff);
+  expect(genDiff(filePath1, filePath2, 'json')).toBe(jsonDiff);
 });
