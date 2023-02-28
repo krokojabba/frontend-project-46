@@ -9,68 +9,51 @@ const keyValueSeparator = ': ';
 const nodeOpenSymbol = '{';
 const nodeCloseSymbol = '}';
 
-const getIndent = (lvl, statusSymbol = '') => {
-  const indent = indentSymbol.repeat(lvl * lvlMult - statusSymbol.length) + statusSymbol;
-  return indent;
-};
+const getIndent = (lvl, statusSymbol = '') => indentSymbol
+  .repeat(lvl * lvlMult - statusSymbol.length) + statusSymbol;
 
 const stringifyData = (key, statusSymbol, data, lvl) => {
-  let strs;
   if (_.isObject(data)) {
-    const strObj = Object.keys(data)
-      .sort()
+    const strObj = _.sortBy(Object.keys(data))
       .flatMap((subKey) => stringifyData(subKey, '', data[subKey], lvl + 1));
-    strs = [
+    return [
       getIndent(lvl, statusSymbol) + key + keyValueSeparator + nodeOpenSymbol,
       ...strObj,
       getIndent(lvl) + nodeCloseSymbol,
     ];
-  } else {
-    strs = getIndent(lvl, statusSymbol) + key + keyValueSeparator + data;
   }
-  return strs;
+  return getIndent(lvl, statusSymbol) + key + keyValueSeparator + data;
 };
 
 const stringifyDiffs = (innerDiffs, lvl) => {
   const result = _.flatMapDeep(innerDiffs, ({ key, status, data }) => {
-    let diffStrings;
-
     switch (status) {
       case 'added':
-        diffStrings = stringifyData(key, addSymbol, data, lvl);
-        break;
+        return stringifyData(key, addSymbol, data, lvl);
       case 'deleted':
-        diffStrings = stringifyData(key, deleteSymbol, data, lvl);
-        break;
+        return stringifyData(key, deleteSymbol, data, lvl);
       case 'constant':
-        diffStrings = stringifyData(key, constantSymbol, data, lvl);
-        break;
+        return stringifyData(key, constantSymbol, data, lvl);
       case 'modified':
-        diffStrings = [
+        return [
           stringifyData(key, deleteSymbol, data[0], lvl),
           stringifyData(key, addSymbol, data[1], lvl),
         ];
-        break;
       case 'node':
-        diffStrings = [
+        return [
           getIndent(lvl) + key + keyValueSeparator + nodeOpenSymbol,
           stringifyDiffs(data, lvl + 1),
           getIndent(lvl) + nodeCloseSymbol,
         ];
-        break;
       default:
-        diffStrings = [];
-        break;
+        return [];
     }
-
-    return diffStrings;
   });
   return result;
 };
 
 export default (diffs) => {
   const result = `${nodeOpenSymbol}\n${stringifyDiffs(diffs, 1)
-    // .map((str) => str.trimEnd())
     .join('\n')}\n${nodeCloseSymbol}`;
   return result;
 };

@@ -2,20 +2,18 @@ import stylish from './stylish.js';
 import plain from './plain.js';
 import json from './json.js';
 
-export default (diffs, type) => {
-  let format;
+export default (type) => {
   switch (type) {
-    case 'stylish':
-      format = stylish;
-      break;
-    case 'plain':
-      format = plain;
-      break;
-    case 'json':
-      format = json;
-      break;
+    case 'stylish': {
+      return stylish;
+    }
+    case 'plain': {
+      return plain;
+    }
+    case 'json': {
+      return json;
+    }
     default:
+      return stylish;
   }
-
-  return format(diffs);
 };

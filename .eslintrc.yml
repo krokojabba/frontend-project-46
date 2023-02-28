@@ -1,6 +1,7 @@
 plugins:
   # https://github.com/jest-community/eslint-plugin-jest
   - jest
+  - fp
 
 env:
   node: true
@@ -15,3 +16,6 @@ parserOptions:
 rules:
   no-console: 0
   import/extensions: 0
+  fp/no-let: 'error'
+  fp/no-mutation: 'error'
+  fp/no-mutating-methods: 'error'
