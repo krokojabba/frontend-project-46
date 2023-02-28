@@ -70,7 +70,7 @@ const stringifyDiffs = (innerDiffs, lvl) => {
 
 export default (diffs) => {
   const result = `${nodeOpenSymbol}\n${stringifyDiffs(diffs, 1)
-    .map((str) => str.trimEnd())
+    // .map((str) => str.trimEnd())
     .join('\n')}\n${nodeCloseSymbol}`;
   return result;
 };
