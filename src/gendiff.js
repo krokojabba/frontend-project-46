@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import parseFile from './parsers.js';
-import format from './formatters.js';
+import format from './formatters/index.js';
 
 const genDiff = (filepath1, filepath2, formatter = 'stylish') => {
   const generateDiff = (object1, object2) => {

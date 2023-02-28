@@ -8,14 +8,17 @@ const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf8')
 
 let filePath1;
 let filePath2;
-let diff1;
+let stylishDiff;
+let plainDiff;
 
 beforeAll(() => {
   filePath1 = '__fixtures__/file1.json';
   filePath2 = '__fixtures__/file2.yaml';
-  diff1 = readFile('diff1.txt');
+  stylishDiff = readFile('stylishDiff.txt');
+  plainDiff = readFile('plainDiff.txt');
 });
 
 test('diff test', () => {
-  expect(genDiff(filePath1, filePath2)).toBe(diff1);
+  expect(genDiff(filePath1, filePath2)).toBe(stylishDiff);
+  expect(genDiff(filePath1, filePath2, 'plain')).toBe(plainDiff);
 });
