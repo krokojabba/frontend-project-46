@@ -14,6 +14,6 @@ export default (type) => {
       return json;
     }
     default:
-      return stylish;
+      throw new Error(`Formatter ${type} - is incorrect`);
   }
 };

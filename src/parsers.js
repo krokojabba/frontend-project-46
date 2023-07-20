@@ -10,7 +10,7 @@ const getParser = (type) => {
     case '.yml':
       return yaml.load;
     default:
-      return () => {};
+      throw new Error(`Format ${type} - is incorrect`);
   }
 };
 
